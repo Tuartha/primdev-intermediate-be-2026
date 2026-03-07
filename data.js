@@ -1,0 +1,122 @@
+export const books = [
+  {
+    id: 1,
+    title: 'Laskar Pelangi',
+    author: 'Andrea Hirata',
+    year: 2005,
+  },
+  {
+    id: 2,
+    title: 'Bumi Manusia',
+    author: 'Pramoedya Ananta Toer',
+    year: 1980,
+  },
+  {
+    id: 3,
+    title: 'Cantik Itu Luka',
+    author: 'Eka Kurniawan',
+    year: 2002,
+  },
+  {
+    id: 4,
+    title: 'Hujan',
+    author: 'Tere Liye',
+    year: 2016,
+  },
+  {
+    id: 5,
+    title: 'Negeri 5 Menara',
+    author: 'Ahmad Fuadi',
+    year: 2009,
+  },
+  {
+    id: 6,
+    title: 'Perahu Kertas',
+    author: 'Dee Lestari',
+    year: 2009,
+  },
+  {
+    id: 7,
+    title: 'Ronggeng Dukuh Paruk',
+    author: 'Ahmad Tohari',
+    year: 1982,
+  },
+  {
+    id: 8,
+    title: 'Lelaki Harimau',
+    author: 'Eka Kurniawan',
+    year: 2004,
+  },
+  {
+    id: 9,
+    title: 'Dilan: Dia adalah Dilanku Tahun 1990',
+    author: 'Pidi Baiq',
+    year: 2014,
+  },
+  {
+    id: 10,
+    title: '5 cm',
+    author: 'Donny Dhirgantoro',
+    year: 2005,
+  },
+  {
+    id: 11,
+    title: 'Ayat-Ayat Cinta',
+    author: 'Habiburrahman El Shirazy',
+    year: 2004,
+  },
+  {
+    id: 12,
+    title: 'Supernova: Ksatria, Puteri, dan Bintang Jatuh',
+    author: 'Dee Lestari',
+    year: 2001,
+  },
+  {
+    id: 13,
+    title: 'Laut Bercerita',
+    author: 'Leila S. Chudori',
+    year: 2017,
+  },
+  {
+    id: 14,
+    title: 'Pulang',
+    author: 'Leila S. Chudori',
+    year: 2012,
+  },
+  {
+    id: 15,
+    title: 'Anak Semua Bangsa',
+    author: 'Pramoedya Ananta Toer',
+    year: 1980,
+  },
+  {
+    id: 16,
+    title: 'Tenggelamnya Kapal Van der Wijck',
+    author: 'Hamka',
+    year: 1938,
+  },
+  {
+    id: 17,
+    title: 'Salah Asuhan',
+    author: 'Abdoel Moeis',
+    year: 1928,
+  },
+  {
+    id: 18,
+    title: 'Siti Nurbaya',
+    author: 'Marah Roesli',
+    year: 1922,
+  },
+  {
+    id: 19,
+    title: 'Raden Mandasia Si Pencuri Daging Sapi',
+    author: 'Yusi Avianto Pareanom',
+    year: 2016,
+  },
+  {
+    id: 20,
+    title: 'Aroma Karsa',
+    author: 'Dee Lestari',
+    year: 2018,
+  }
+];

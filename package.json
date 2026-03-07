@@ -1,0 +1,16 @@
+{
+  "name": "primdev-intermediate-be-2026",
+  "version": "1.0.0",
+  "description": "primdev intermediate class back-end 2026 project",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "TuJayaks",
+  "type": "module",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
