@@ -1,0 +1,57 @@
+name: Supabase Heartbeat (Keep Alive)
+
+# Cron job yang berjalan setiap 3 hari
+on:
+  schedule:
+    # Setiap 3 hari pada pukul 00:00 UTC
+    # Format: minute hour day(*/3) month day-of-week
+    - cron: '0 0 */3 * *'
+  # Memungkinkan trigger manual dari Actions tab
+  workflow_dispatch:
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Ping Supabase Database
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          node -e "
+            const { createClient } = require('@supabase/supabase-js');
+            
+            const supabase = createClient(
+              process.env.DIRECT_URL,
+              process.env.SUPABASE_ANON_KEY
+            );
+            
+            // Ping dengan query sederhana
+            supabase
+              .from('Users')
+              .select('*')
+              .limit(1)
+              .then(() => {
+                console.log('✓ Supabase heartbeat successful at ' + new Date().toISOString());
+              })
+              .catch((error) => {
+                console.error('✗ Supabase heartbeat failed:', error);
+                process.exit(1);
+              });
+          "
+
+      - name: Log execution time
+        run: echo "Heartbeat check completed at $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
