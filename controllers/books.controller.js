@@ -1,4 +1,5 @@
 import prisma from "../config/database.config.js"
+import { isCategoryExist } from './categories.controller.js'
 
 export const getBooks = async (req, res) => {
     const books = await prisma.books.findMany()
@@ -16,6 +17,13 @@ export const getBookById = async (req, res) => {
   const book = await prisma.books.findUnique({
     where: {
       id: id
+    },
+    include: {
+      categories: {
+        select: {
+          name: true
+        }
+      }
     }
   })
 
@@ -30,14 +38,24 @@ export const getBookById = async (req, res) => {
 }
 
 export const createBook = async (req, res) => {
-    const { title, author, year } = req.body;
+    const { categoryId, title, author, year } = req.body;
   // const newId = books.length + 1;
   // const newBook = { id: newId, title, author, year };
 
   // books.push(newBook);
 
+  const categoryExists = await isCategoryExist(categoryId)
+
+  if (!categoryExists) {
+    return res.json({
+      success: false,
+      message: `Category with ID: ${categoryId} not found`,
+    })
+  }
+
   const book = await prisma.books.create({
     data: {
+      categoryId,
       title,
       author,
       year
@@ -53,7 +71,7 @@ export const createBook = async (req, res) => {
 
 export const updateBook = async (req, res) => {
     const id = parseInt(req.params.id);
-  const { title, author, year } = req.body;
+  const { categoryId, title, author, year } = req.body;
 
   // const bookIndex = books.find((book) => book.id == id);
   // bookIndex.title = title;
@@ -71,11 +89,21 @@ export const updateBook = async (req, res) => {
     return
   }
 
+  const categoryExists = await isCategoryExist(categoryId)
+
+  if (!categoryExists) {
+    return res.json({
+      success: false,
+      message: `Category with ID: ${categoryId} not found`,
+    })
+  }
+
   await prisma.books.update({
     where: {
       id: id
     },
     data: {
+      categoryId,
       title,
       author, 
       year

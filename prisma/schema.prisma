@@ -22,13 +22,36 @@ model Users {
   password  String   @db.VarChar(255)
   role      String   @default("USER")
   createdAt DateTime @default(now())
+
+  profiles Profiles?
 }
 
 model Books {
+  id         Int      @id @default(autoincrement())
+  categoryId Int?
+  title      String
+  author     String
+  year       Int
+  available  Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  categories Categories? @relation(fields: [categoryId], references: [id])
+}
+
+model Profiles {
   id        Int      @id @default(autoincrement())
-  title     String
-  author    String
-  year      Int
-  available Boolean  @default(true)
+  userId    Int      @unique
+  address   String?
+  phone     String?
   createdAt DateTime @default(now())
+
+  user Users @relation(fields: [userId], references: [id])
+}
+
+model Categories {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  
+  books Books[]
 }
