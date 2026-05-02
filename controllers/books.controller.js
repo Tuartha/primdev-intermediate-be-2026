@@ -4,7 +4,7 @@ import { isCategoryExist } from './categories.controller.js'
 export const getBooks = async (req, res) => {
     const books = await prisma.books.findMany()
   
-    res.json({
+    res.status(200).json({
         "success": true,
         "message": "Books retrieved successfully",
         "data": books
@@ -28,9 +28,9 @@ export const getBookById = async (req, res) => {
   })
 
   if (!book) {
-    res.send(`Books with id: ${id} not found`);
+    res.status(404).send(`Books with id: ${id} not found`);
   }
-  res.json({
+  res.status(200).json({
     "success": true,
     "message": "Book retrieved successfully",
     "data": book
@@ -47,7 +47,7 @@ export const createBook = async (req, res) => {
   const categoryExists = await isCategoryExist(categoryId)
 
   if (!categoryExists) {
-    return res.json({
+    return res.status(404).json({
       success: false,
       message: `Category with ID: ${categoryId} not found`,
     })
@@ -62,7 +62,7 @@ export const createBook = async (req, res) => {
     }
   })
 
-  res.json({
+  res.status(201).json({
     "success": true,
     "message": "Book created successfully",
     "data": book
@@ -85,14 +85,14 @@ export const updateBook = async (req, res) => {
   })
 
   if (!book) {
-    res.send(`Book with ID: ${id} not found`)
+    res.status(404).send(`Book with ID: ${id} not found`)
     return
   }
 
   const categoryExists = await isCategoryExist(categoryId)
 
   if (!categoryExists) {
-    return res.json({
+    return res.status(404).json({
       success: false,
       message: `Category with ID: ${categoryId} not found`,
     })
@@ -109,7 +109,7 @@ export const updateBook = async (req, res) => {
       year
     }
   })
-  res.json({
+  res.status(200).json({
     "success": true,
     "message": "Book updated successfully",
     "data": book
@@ -129,7 +129,7 @@ export const deleteBook = async (req, res) => {
   })
 
   if (!book) {
-    res.send(`Book with ID: ${id} not found`)
+    res.status(200).send(`Book with ID: ${id} not found`)
     return
   }
 
@@ -138,7 +138,7 @@ export const deleteBook = async (req, res) => {
       id: id
     }
   })
-  res.json({
+  res.status(200).json({
     "success": true,
     "message": "Book deleted successfully"
   })

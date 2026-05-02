@@ -3,7 +3,7 @@ import prisma from '../config/database.config.js'
 export const getUsers = async (req, res) => {
   const users = await prisma.users.findMany()
   
-  res.json({
+  res.status(200).json({
     "success": true,
     "message": "Users retrieved successfully",
     "data": users
@@ -28,11 +28,11 @@ export const getUserId = async (req, res) => {
   })
 
   if (!user) {
-    res.send(`Users with id: ${id} not found`);
+    res.status(404).send(`Users with id: ${id} not found`);
   }
-  res.json({
+  res.status(200).json({
     "success": true,
-    "message": "Book retrieved successfully",
+    "message": "User retrieved successfully",
     "data": user
   })
 }
@@ -48,7 +48,7 @@ export const createUser = async (req, res) => {
     }
   })
 
-  res.json({
+  res.status(201).json({
     "success": true,
     "message": "Users created successfully",
     "data": user
@@ -66,7 +66,7 @@ export const updateUser = async (req, res) => {
   })
 
   if (!user) {
-    res.send(`User with ID: ${id} not found`)
+    res.status(404).send(`User with ID: ${id} not found`)
     return
   }
 
@@ -80,7 +80,7 @@ export const updateUser = async (req, res) => {
       password
     }
   })
-  res.json({
+  res.status(200).json({
     "success": true,
     "message": "Users updated successfully",
     "data": user
@@ -97,7 +97,7 @@ export const deleteUser = async (req, res) => {
   })
 
   if (!user) {
-    res.send(`User with ID: ${id} not found`)
+    res.status(404).send(`User with ID: ${id} not found`)
     return
   }
 
@@ -106,9 +106,9 @@ export const deleteUser = async (req, res) => {
       id: id
     }
   })
-  res.json({
+  res.status(200).json({
     "success": true,
-    "message": "Users deleted successfully",
+    "message": "User deleted successfully",
     "data": user
   })
 }

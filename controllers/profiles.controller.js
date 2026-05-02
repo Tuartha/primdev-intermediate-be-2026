@@ -3,7 +3,7 @@ import prisma from '../config/database.config.js'
 export const getProfiles = async (req, res) => {
   const profiles = await prisma.profiles.findMany()
   
-  res.json({
+  res.status(200).json({
     "success": true,
     "message": "Profiles retrieved successfully",
     "data": profiles
@@ -20,7 +20,7 @@ export const getProfileId = async (req, res) => {
   })
 
   if (!profile) {
-    res.send(`Profile with id: ${id} not found`);
+    res.status(404).send(`Profile with id: ${id} not found`);
   }
   res.json({
     "success": true,
@@ -40,7 +40,7 @@ export const createProfile = async (req, res) => {
     }
   })
 
-  res.json({
+  res.status(200).json({
     "success": true,
     "message": "Profile created successfully",
     "data": profile
@@ -58,7 +58,7 @@ export const updateProfile = async (req, res) => {
   })
 
   if (!profile) {
-    res.send(`Profile with ID: ${id} not found`)
+    res.status(404).send(`Profile with ID: ${id} not found`)
     return
   }
 
@@ -72,7 +72,7 @@ export const updateProfile = async (req, res) => {
       phone
     }
   })
-  res.json({
+  res.status(200).json({
     "success": true,
     "message": "Profile updated successfully",
     "data": profile
@@ -89,7 +89,7 @@ export const deleteProfile = async (req, res) => {
   })
 
   if (!profile) {
-    res.send(`Profile with ID: ${id} not found`)
+    res.status(404).send(`Profile with ID: ${id} not found`)
     return
   }
 
@@ -98,7 +98,7 @@ export const deleteProfile = async (req, res) => {
       id: id
     }
   })
-  res.json({
+  res.status(200).json({
     "success": true,
     "message": "Profile deleted successfully",
     "data": profile
