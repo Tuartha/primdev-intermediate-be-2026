@@ -1,4 +1,5 @@
 import prisma from '../config/database.config.js'
+import { checkValidations } from '../helpers/check-validations.js'
 
 export const getUsers = async (req, res) => {
   const users = await prisma.users.findMany()
@@ -37,7 +38,9 @@ export const getUserId = async (req, res) => {
   })
 }
 
-export const createUser = async (req, res) => {
+export const createUser = async (req, res, next) => {
+  checkValidations(req, res, next);
+
   const { name, email, password } = req.body;
 
   const user = await prisma.users.create({
@@ -55,8 +58,10 @@ export const createUser = async (req, res) => {
   })
 }
 
-export const updateUser = async (req, res) => {
-    const id = parseInt(req.params.id);
+export const updateUser = async (req, res, next) => {
+  checkValidations(req, res, next);
+
+  const id = parseInt(req.params.id);
   const { name, email, password } = req.body;
 
   const user = await prisma.users.findUnique({

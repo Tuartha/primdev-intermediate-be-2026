@@ -1,4 +1,5 @@
 import prisma from '../config/database.config.js'
+import { checkValidations } from '../helpers/check-validations.js'
 
 export const getCategories = async (req, res) => {
   const categories = await prisma.categories.findMany()
@@ -29,7 +30,9 @@ export const getCategoryId = async (req, res) => {
   })
 }
 
-export const createCategory = async (req, res) => {
+export const createCategory = async (req, res, next) => {
+  checkValidations(req, res, next);
+
   const { name } = req.body;
 
   const category = await prisma.categories.create({
@@ -45,8 +48,10 @@ export const createCategory = async (req, res) => {
   })
 }
 
-export const updateCategory = async (req, res) => {
-    const id = parseInt(req.params.id);
+export const updateCategory = async (req, res, next) => {
+  checkValidations(req, res, next);
+
+  const id = parseInt(req.params.id);
   const { name } = req.body;
     
   const category = await prisma.categories.findUnique({

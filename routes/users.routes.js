@@ -1,14 +1,16 @@
 import express from "express";
 
 import { usersController } from "../controllers/index.controller.js";
+import { userValidation, updateUserValidation } from "../validations/users.validation.js";
+import { authorizeAdmin } from "../middleware/admin.middleware.js";
 
 const router = express.Router()
 
-// BOOKS
+// USERS
 router.get('/', usersController.getUsers)
 router.get('/:id', usersController.getUserId)
-router.post('/', usersController.createUser)
-router.put('/:id', usersController.updateUser)
-router.delete('/:id', usersController.deleteUser)
+router.post('/', authorizeAdmin, userValidation, usersController.createUser)
+router.put('/:id', authorizeAdmin, updateUserValidation, usersController.updateUser)
+router.delete('/:id', authorizeAdmin, usersController.deleteUser)
 
 export default router

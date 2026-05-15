@@ -1,56 +1,60 @@
-import prisma from "../config/database.config.js"
-import { isCategoryExist } from './categories.controller.js'
+import prisma from "../config/database.config.js";
+import { isCategoryExist } from "./categories.controller.js";
+// import { validationResult } from 'express-validator';
+import { checkValidations } from "../helpers/check-validations.js";
 
 export const getBooks = async (req, res) => {
-    const books = await prisma.books.findMany()
-  
-    res.status(200).json({
-        "success": true,
-        "message": "Books retrieved successfully",
-        "data": books
-    })
-}
+  const books = await prisma.books.findMany();
+
+  res.status(200).json({
+    success: true,
+    message: "Books retrieved successfully",
+    data: books,
+  });
+};
 
 export const getBookById = async (req, res) => {
-    const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id);
 
   const book = await prisma.books.findUnique({
     where: {
-      id: id
+      id: id,
     },
     include: {
       categories: {
         select: {
-          name: true
-        }
-      }
-    }
-  })
+          name: true,
+        },
+      },
+    },
+  });
 
   if (!book) {
     res.status(404).send(`Books with id: ${id} not found`);
   }
   res.status(200).json({
-    "success": true,
-    "message": "Book retrieved successfully",
-    "data": book
-  })
-}
+    success: true,
+    message: "Book retrieved successfully",
+    data: book,
+  });
+};
 
-export const createBook = async (req, res) => {
-    const { categoryId, title, author, year } = req.body;
+export const createBook = async (req, res, next) => {
+  checkValidations(req, res, next);
+
+  const { categoryId, title, author, year } = req.body;
   // const newId = books.length + 1;
   // const newBook = { id: newId, title, author, year };
 
   // books.push(newBook);
 
-  const categoryExists = await isCategoryExist(categoryId)
+  const categoryExists = await isCategoryExist(categoryId);
 
   if (!categoryExists) {
     return res.status(404).json({
       success: false,
       message: `Category with ID: ${categoryId} not found`,
-    })
+    });
   }
 
   const book = await prisma.books.create({
@@ -58,19 +62,21 @@ export const createBook = async (req, res) => {
       categoryId,
       title,
       author,
-      year
-    }
-  })
+      year,
+    },
+  });
 
   res.status(201).json({
-    "success": true,
-    "message": "Book created successfully",
-    "data": book
-  })
-}
+    success: true,
+    message: "Book created successfully",
+    data: book,
+  });
+};
 
-export const updateBook = async (req, res) => {
-    const id = parseInt(req.params.id);
+export const updateBook = async (req, res, next) => {
+  checkValidations(req, res, next);
+
+  const id = parseInt(req.params.id);
   const { categoryId, title, author, year } = req.body;
 
   // const bookIndex = books.find((book) => book.id == id);
@@ -80,66 +86,66 @@ export const updateBook = async (req, res) => {
 
   const book = await prisma.books.findUnique({
     where: {
-      id: id
-    }
-  })
+      id: id,
+    },
+  });
 
   if (!book) {
-    res.status(404).send(`Book with ID: ${id} not found`)
-    return
+    res.status(404).send(`Book with ID: ${id} not found`);
+    return;
   }
 
-  const categoryExists = await isCategoryExist(categoryId)
+  const categoryExists = await isCategoryExist(categoryId);
 
   if (!categoryExists) {
     return res.status(404).json({
       success: false,
       message: `Category with ID: ${categoryId} not found`,
-    })
+    });
   }
 
   await prisma.books.update({
     where: {
-      id: id
+      id: id,
     },
     data: {
       categoryId,
       title,
-      author, 
-      year
-    }
-  })
+      author,
+      year,
+    },
+  });
   res.status(200).json({
-    "success": true,
-    "message": "Book updated successfully",
-    "data": book
-  })
-}
+    success: true,
+    message: "Book updated successfully",
+    data: book,
+  });
+};
 
 export const deleteBook = async (req, res) => {
-    const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id);
 
   // const bookIndex = books.find((book) => book.id === id);
   // books.splice(bookIndex, 1);
 
   const book = await prisma.books.findUnique({
     where: {
-      id: id
-    }
-  })
+      id: id,
+    },
+  });
 
   if (!book) {
-    res.status(200).send(`Book with ID: ${id} not found`)
-    return
+    res.status(200).send(`Book with ID: ${id} not found`);
+    return;
   }
 
   await prisma.books.delete({
     where: {
-      id: id
-    }
-  })
+      id: id,
+    },
+  });
   res.status(200).json({
-    "success": true,
-    "message": "Book deleted successfully"
-  })
-}
+    success: true,
+    message: "Book deleted successfully",
+  });
+};

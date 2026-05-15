@@ -24,6 +24,7 @@ model Users {
   createdAt DateTime @default(now())
 
   profiles Profiles?
+  borrowings Borrowings[] 
 }
 
 model Books {
@@ -36,6 +37,7 @@ model Books {
   createdAt  DateTime @default(now())
 
   categories Categories? @relation(fields: [categoryId], references: [id])
+  borrowings Borrowings[] 
 }
 
 model Profiles {
@@ -54,4 +56,15 @@ model Categories {
   createdAt DateTime @default(now())
   
   books Books[]
+}
+
+model Borrowings {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  bookId      Int
+  borrow_date DateTime  @default(now())
+  returned_at DateTime?
+  createdAt   DateTime  @default(now())
+  borrower    Users     @relation(fields: [userId], references: [id])
+  book        Books     @relation(fields: [bookId], references: [id])
 }
