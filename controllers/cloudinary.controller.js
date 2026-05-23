@@ -1,4 +1,5 @@
 import cloudinary from '../config/cloudinary.config.js'
+import logger from '../config/logger.config.js'
 
 export const getFileUrl = (publicId) => {
   return cloudinary.v2.url(publicId)
@@ -22,7 +23,10 @@ export const uploadFile = async (
 
     return result
   } catch (error) {
-    console.error('Error uploading image:', error)
+    logger.error(
+      { publicId: options.public_id, error: error.message },
+      'Error uploading image to Cloudinary',
+    )
 
     throw new Error('Error uploading image')
   }
@@ -34,7 +38,10 @@ export const deleteFile = async (publicId) => {
 
     return result
   } catch (error) {
-    console.error('Error deleting image:', error)
+    logger.error(
+      { publicId: publicId, error: error.message },
+      'Error deleting image from Cloudinary',
+    )
 
     throw new Error('Error deleting image')
   }

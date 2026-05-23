@@ -36,42 +36,13 @@ Fitur utama yang tersedia:
 ```
 primdev-intermediate-be-2026/
 ├── config/
-│   ├── cloudinary.config.js        # Konfigurasi Cloudinary
-│   ├── database.config.js          # Konfigurasi koneksi database
-│   └── logger.config.js            # Konfigurasi Pino logger
 ├── controllers/
-│   ├── auth.controller.js          # Controller autentikasi (register & login)
-│   ├── books.controller.js         # Controller CRUD buku
-│   ├── borrowings.controller.js    # Controller peminjaman buku
-│   ├── categories.controller.js    # Controller CRUD kategori
-│   ├── cloudinary.controller.js    # Controller upload Cloudinary
-│   ├── index.controller.js         # Barrel export semua controller
-│   ├── profiles.controller.js      # Controller CRUD profil
-│   └── users.controller.js         # Controller CRUD pengguna
 ├── generated/
-│   └── prisma/                     # Prisma Client yang di-generate
 ├── helpers/
-│   └── check-validations.js        # Helper untuk mengecek hasil validasi
 ├── middleware/
-│   ├── admin.middleware.js          # Middleware otorisasi admin
-│   └── auth.middleware.js           # Middleware autentikasi JWT
 ├── prisma/
-│   ├── migrations/                 # File migrasi database
-│   ├── schema.prisma               # Skema database Prisma
-│   └── seed.js                     # Seed data awal
 ├── routes/
-│   ├── auth.routes.js              # Route autentikasi
-│   ├── books.routes.js             # Route buku
-│   ├── borrowings.routes.js        # Route peminjaman
-│   ├── categories.routes.js        # Route kategori
-│   ├── index.routes.js             # Router utama (barrel)
-│   ├── profiles.routes.js          # Route profil
-│   └── users.routes.js             # Route pengguna
 ├── validations/
-│   ├── auth.validation.js          # Validasi register & login
-│   ├── books.validation.js         # Validasi input buku
-│   ├── categories.validation.js    # Validasi input kategori
-│   └── users.validation.js         # Validasi input pengguna
 ├── .env                            # Environment variables
 ├── .gitignore                      # File yang diabaikan Git
 ├── data.js                         # Data statis / seed data
