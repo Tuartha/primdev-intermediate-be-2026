@@ -33,6 +33,7 @@ model Books {
   title      String
   author     String
   year       Int
+  cloudinaryId String? 
   available  Boolean  @default(true)
   createdAt  DateTime @default(now())
 
