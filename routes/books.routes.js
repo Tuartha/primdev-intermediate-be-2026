@@ -1,6 +1,6 @@
 import express from "express";
 
-import { booksController } from "../controllers/index.controller.js";
+import { booksController, reviewsController } from "../controllers/index.controller.js";
 import { bookValidation, updateBookValidation } from "../validations/books.validation.js";
 import { authorizeAdmin } from "../middleware/admin.middleware.js";
 import multer from 'multer'
@@ -13,6 +13,7 @@ const router = express.Router()
 // BOOKS
 router.get('/', booksController.getBooks)
 router.get('/:id', booksController.getBookById)
+// router.get('/:id/reviews', reviewsController.getReviewsByBookId)`
 // router.post('/', authorizeAdmin, bookValidation, booksController.createBook)
 // router.put('/:id', authorizeAdmin, updateBookValidation, booksController.updateBook)
 router.delete('/:id', authorizeAdmin, booksController.deleteBook)

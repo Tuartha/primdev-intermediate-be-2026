@@ -91,16 +91,11 @@ export const createBook = async (req, res, next) => {
 	  // Tambahkan logger
     logger.debug({ body: req.body }, 'createBook: Started')
 
-    const validationErrors = checkValidations(req, res, next)
+    const isValid = checkValidations(req, res, next);
 
-    if (!validationErrors.isEmpty()) {
-		  // Tambahkan logger
-      logger.warn({ errors: validationErrors.array() }, 'Validation failed')
-      return res.status(400).json({
-        success: false,
-        message: 'Validation error',
-        errors: validationErrors.array(),
-      })
+    // checkValidations sudah mengirim response 400 jika validasi gagal
+    if (isValid !== true) {
+      return;
     }
 
     const { categoryId, title, author, year } = req.body
@@ -172,19 +167,11 @@ export const updateBook = async (req, res, next) => {
 	  // Tambahkan logger
     logger.debug({ bookId: id, body: req.body }, 'updateBook: Started')
 
-    const validationErrors = checkValidations(req, res, next)
+    const isValid = checkValidations(req, res, next);
 
-    if (!validationErrors.isEmpty()) {
-		  // Tambahkan logger
-      logger.warn(
-        { bookId: id, errors: validationErrors.array() },
-        'Validation failed',
-      )
-      return res.status(400).json({
-        success: false,
-        message: 'Validation error',
-        errors: validationErrors.array(),
-      })
+    // checkValidations sudah mengirim response 400 jika validasi gagal
+    if (isValid !== true) {
+      return;
     }
 
     const { categoryId, title, author, year } = req.body

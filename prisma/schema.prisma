@@ -25,6 +25,7 @@ model Users {
 
   profiles Profiles?
   borrowings Borrowings[] 
+  reviews    Reviews[]
 }
 
 model Books {
@@ -39,6 +40,7 @@ model Books {
 
   categories Categories? @relation(fields: [categoryId], references: [id])
   borrowings Borrowings[] 
+  reviews    Reviews[]
 }
 
 model Profiles {
@@ -67,5 +69,17 @@ model Borrowings {
   returned_at DateTime?
   createdAt   DateTime  @default(now())
   borrower    Users     @relation(fields: [userId], references: [id])
+  book        Books     @relation(fields: [bookId], references: [id])
+}
+
+model Reviews {
+  id          Int       @id @default(autoincrement())
+  rating      Int
+  comment     String
+  userId      Int
+  bookId      Int
+  createdAt   DateTime  @default(now())
+
+  user        Users     @relation(fields: [userId], references: [id])
   book        Books     @relation(fields: [bookId], references: [id])
 }

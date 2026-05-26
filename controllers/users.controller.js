@@ -71,16 +71,11 @@ export const getUserId = async (req, res) => {
 export const createUser = async (req, res, next) => {
   try {
     logger.debug('createUser: Started')
-    const validationErrors = checkValidations(req, res, next);
+    const isValid = checkValidations(req, res, next);
 
-    if (!validationErrors.isEmpty()) {
-		  // Tambahkan logger
-      logger.warn({ errors: validationErrors.array() }, 'Validation failed')
-      return res.status(400).json({
-        success: false,
-        message: 'Validation error',
-        errors: validationErrors.array(),
-      })
+    // checkValidations sudah mengirim response 400 jika validasi gagal
+    if (isValid !== true) {
+      return;
     }
 
     const { name, email, password } = req.body;
@@ -113,15 +108,11 @@ export const createUser = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
   try {
     logger.debug('updateUser: Started')
-    const validationErrors = checkValidations(req, res, next);
+    const isValid = checkValidations(req, res, next);
 
-    if (!validationErrors.isEmpty()) {
-      logger.warn({ errors: validationErrors.array() }, 'Validation failed')
-      return res.status(400).json({
-        success: false,
-        message: 'Validation error',
-        errors: validationErrors.array(),
-      })
+    // checkValidations sudah mengirim response 400 jika validasi gagal
+    if (isValid !== true) {
+      return;
     }
 
     const id = parseInt(req.params.id);

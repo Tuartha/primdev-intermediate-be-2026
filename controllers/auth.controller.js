@@ -9,15 +9,11 @@ import logger from '../config/logger.config.js'
 export const register = async (req, res, next) => {
   try {
     logger.debug({ body: req.body }, 'createBook: Started')
-    const validationErrors = checkValidations(req, res, next);
+    const isValid = checkValidations(req, res, next);
 
-    if (!validationErrors.isEmpty()) {
-      logger.warn({ errors: validationErrors.array() }, 'Validation failed')
-      return res.status(400).json({
-        success: false,
-        message: 'Validation error',
-        errors: validationErrors.array(),
-      })
+    // checkValidations sudah mengirim response 400 jika validasi gagal
+    if (isValid !== true) {
+      return;
     }
 
     // Mendapatkan data pengguna baru dari request body
@@ -43,7 +39,7 @@ export const register = async (req, res, next) => {
 
     // Menambahkan pengguna baru ke database menggunakan Prisma Client
     logger.debug(
-      { name, email, role },
+      { name, email, role: 'USER' },
       'Creating user in database',
     )
     const user = await prisma.users.create({
@@ -78,15 +74,11 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   try {
-    const validationErrors = checkValidations(req, res, next);
+    const isValid = checkValidations(req, res, next);
 
-    if (!validationErrors.isEmpty()) {
-      logger.warn({ errors: validationErrors.array() }, 'Validation failed')
-      return res.status(400).json({
-        success: false,
-        message: 'Validation error',
-        errors: validationErrors.array(),
-      })
+    // checkValidations sudah mengirim response 400 jika validasi gagal
+    if (isValid !== true) {
+      return;
     }
 
     // Mendapatkan data login dari request body

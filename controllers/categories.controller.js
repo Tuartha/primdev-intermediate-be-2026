@@ -60,16 +60,11 @@ export const getCategoryId = async (req, res) => {
 
 export const createCategory = async (req, res, next) => {
   try {
-    const validartionErrors = checkValidations(req, res, next);
+    const isValid = checkValidations(req, res, next);
 
-    if (!validationErrors.isEmpty()) {
-		  // Tambahkan logger
-      logger.warn({ errors: validationErrors.array() }, 'Validation failed')
-      return res.status(400).json({
-        success: false,
-        message: 'Validation error',
-        errors: validationErrors.array(),
-      })
+    // checkValidations sudah mengirim response 400 jika validasi gagal
+    if (isValid !== true) {
+      return;
     }
 
     const { name } = req.body;
@@ -99,15 +94,11 @@ export const createCategory = async (req, res, next) => {
 
 export const updateCategory = async (req, res, next) => {
   try {
-    const validationErrors = checkValidations(req, res, next);
+    const isValid = checkValidations(req, res, next);
 
-    if (!validationErrors.isEmpty()) {
-      logger.warn({ errors: validationErrors.array() }, 'Validation failed')
-      return res.status(400).json({
-        success: false,
-        message: 'Validation error',
-        errors: validationErrors.array(),
-      })
+    // checkValidations sudah mengirim response 400 jika validasi gagal
+    if (isValid !== true) {
+      return;
     }
 
     const id = parseInt(req.params.id);
