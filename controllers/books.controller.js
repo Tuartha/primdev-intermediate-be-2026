@@ -342,6 +342,110 @@ export const isBookExist = async (id) => {
   return !!book
 }
 
+export const searchBooks = async (req, res) => {
+  try {
+    let { query, page, limit } = req.query
+
+    if (!query || query.trim() === '') {
+      logger.warn('Search query is empty')
+      return res.status(400).json({
+        success: false,
+        message: 'Search query is required',
+      })
+    }
+
+    query = query.trim()
+    logger.debug({ query }, 'searchBooks: Started')
+
+    const currentPage = parseInt(page) || 1
+    const perPage = parseInt(limit) || 10
+
+    const skip = (currentPage - 1) * perPage
+
+    const searchCondition = {
+      OR: [
+        {
+          title: {
+            contains: query,
+            mode: 'insensitive',
+          },
+        },
+        {
+          author: {
+            contains: query,
+            mode: 'insensitive',
+          },
+        },
+        {
+          isbn: {
+            contains: query,
+            mode: 'insensitive',
+          },
+        },
+      ],
+    }
+
+    const [books, totalBooks] = await Promise.all([
+      prisma.books.findMany({
+        where: searchCondition,
+        select: {
+          id: true,
+          title: true,
+          author: true,
+          isbn: true,
+          cloudinaryId: true,
+          year: true,
+          available: true,
+        },
+        skip: skip,
+        take: perPage,
+        orderBy: {
+          title: 'asc', 
+        },
+      }),
+      prisma.books.count({
+        where: searchCondition,
+      }),
+    ])
+
+    books.forEach((book) => {
+      if (book.cloudinaryId) {
+        book.coverUrl = getFileUrl(book.cloudinaryId)
+      } else {
+        book.coverUrl = null
+      }
+    })
+
+    const totalPages = Math.ceil(totalBooks / perPage)
+    logger.info(
+      { query, totalBooks, currentPage, totalPages },
+      'Search completed',
+    )
+    res.status(200).json({
+      success: true,
+      message: 'Search results retrieved successfully',
+      data: {
+        books: books,
+        pagination: {
+          currentPage: currentPage,
+          totalPages: totalPages,
+          totalBooks: totalBooks,
+          perPage: perPage,
+          hasNextPage: currentPage < totalPages,
+          hasPrevPage: currentPage > 1,
+        },
+      },
+    })
+  } catch (error) {
+    logger.error({ error: error.message }, 'Failed to search books')
+    res.status(500).json({
+      success: false,
+      message: 'An error occurred while searching books',
+      error: error.message,
+    })
+  }
+}
+
 export const filterBooks = async (req, res) => {
   try {
     logger.debug({ query: req.query }, 'filterBooks: Started')

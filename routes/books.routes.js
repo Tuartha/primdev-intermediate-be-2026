@@ -12,6 +12,7 @@ const upload = multer({ storage })
 const router = express.Router()
 
 // BOOKS
+router.get('/search', booksController.searchBooks)
 router.get('/filter', filterValidation, booksController.filterBooks)
 router.get('/', booksController.getBooks)
 router.get('/:id', booksController.getBookById)
