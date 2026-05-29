@@ -36,6 +36,7 @@ model Books {
   year       Int
   isbn       String?  @unique
   cloudinaryId String? 
+  totalCopies  Int      @default(1)
   available  Boolean  @default(true)
   createdAt  DateTime @default(now())
 

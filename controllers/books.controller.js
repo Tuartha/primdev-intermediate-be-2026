@@ -446,6 +446,108 @@ export const searchBooks = async (req, res) => {
   }
 }
 
+export const getBookStatus = async (req, res) => {
+  try {
+    const bookId = parseInt(req.params.id)
+    logger.debug({ bookId }, 'getBooks: Started')
+
+    const book = await prisma.books.findUnique({
+      where: {id: bookId},
+      include: {
+        borrowings: {
+          where: {
+            returned_at: null,
+          },
+          select: {
+            id: true,
+            borrow_date: true,
+            userId: true,
+            borrower: {
+              select: {
+                id: true,
+                name: true,
+              }
+            }
+          },
+          orderBy: {
+            borrow_date: 'asc',
+          }
+        }
+      }
+    })
+
+    if(!book) {
+      logger.warn({ bookId }, 'Book not found')
+      return res.status(404).json({
+        success: false,
+        message: `Book with ID: ${bookId} not found`
+      })
+    }
+
+    const borrowedCopies = book.borrowings.length
+    const totalCopies = book.totalCopies
+    const availableCopies = totalCopies - borrowedCopies
+
+    let status
+    if (availableCopies <= 0) {
+      status = 'all-borrowed'
+    } else if(availableCopies <= Math.ceil(totalCopies * 0.2)) {
+      status = 'low-stock'
+    } else {
+      status = 'available'
+    }
+
+    const BORROW_DURATION_DAYS = 14
+    const borrowedDetails = book.borrowings.map((borrowing) => {
+      const borrowDate = new Date(borrowing.borrow_date)
+      const estimateReturn = new Date(borrowDate)
+      estimateReturn.setDate(estimateReturn.getDate() + BORROW_DURATION_DAYS)
+
+      const now = new Date()
+      const isOverdue = now > estimateReturn
+
+      return {
+        borrowingId: borrowing.id,
+        borrower: borrowing.borrower.name,
+        borrowDate: borrowing.borrow_date,
+        estimatedReturnDate: estimatedReturn.toISOString(),
+        isOverdue: isOverdue,
+        daysUntilReturn: isOverdue
+          ? 0
+          : Math.ceil((estimatedReturn - now) / (1000 * 60 * 60 * 24)),
+      }
+    })
+
+    let nextAvailableDate = null
+    if (availableCopies <= 0 && borrowedDetails.length > 0) {
+      nextAvailableDate = borrowedDetails[0].estimatedReturnDate
+    }
+
+    logger.info({ bookId, status, availableCopies }, 'Book status retrieved')
+    res.status(200).json({
+      success: true,
+      message: 'Book status retrieved successfully',
+      data: {
+        bookId: book.id,
+        title: book.title,
+        status: status,
+        totalCopies: totalCopies,
+        availableCopies: Math.max(0, availableCopies), 
+        borrowedCopies: borrowedCopies,
+        nextAvailableDate: nextAvailableDate,
+        borrowedDetails: borrowedDetails,
+      },
+    })
+  } catch (error) {
+    logger.error({ error: error.message }, 'Failed to get book status')
+    res.status(500).json({
+      success: false,
+      message: 'An error occurred while getting book status',
+      error: error.message,
+    })
+  }
+}
+
 export const filterBooks = async (req, res) => {
   try {
     logger.debug({ query: req.query }, 'filterBooks: Started')
