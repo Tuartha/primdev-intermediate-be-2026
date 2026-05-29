@@ -5,6 +5,7 @@ async function main() {
   console.log('🧹 Cleaning all tables...')
 
   // Delete in order to respect foreign key constraints
+  await prisma.reviews.deleteMany()
   await prisma.borrowings.deleteMany()
   await prisma.profiles.deleteMany()
   await prisma.books.deleteMany()
@@ -104,31 +105,31 @@ async function main() {
   // ===================== BOOKS (25 data) =====================
   console.log('📚 Seeding books...')
   const booksData = [
-    { categoryId: categories[0].id, title: 'Laskar Pelangi', author: 'Andrea Hirata', year: 2005, available: true },
-    { categoryId: categories[0].id, title: 'Bumi Manusia', author: 'Pramoedya Ananta Toer', year: 1980, available: true },
-    { categoryId: categories[0].id, title: 'Perahu Kertas', author: 'Dee Lestari', year: 2009, available: false },
-    { categoryId: categories[1].id, title: 'Sapiens', author: 'Yuval Noah Harari', year: 2011, available: true },
-    { categoryId: categories[1].id, title: 'Atomic Habits', author: 'James Clear', year: 2018, available: true },
-    { categoryId: categories[2].id, title: 'A Brief History of Time', author: 'Stephen Hawking', year: 1988, available: true },
-    { categoryId: categories[2].id, title: 'Cosmos', author: 'Carl Sagan', year: 1980, available: false },
-    { categoryId: categories[3].id, title: 'Clean Code', author: 'Robert C. Martin', year: 2008, available: true },
-    { categoryId: categories[3].id, title: 'The Pragmatic Programmer', author: 'David Thomas', year: 1999, available: true },
-    { categoryId: categories[4].id, title: 'Guns, Germs, and Steel', author: 'Jared Diamond', year: 1997, available: true },
-    { categoryId: categories[4].id, title: 'Sejarah Indonesia Modern', author: 'M.C. Ricklefs', year: 1981, available: false },
-    { categoryId: categories[5].id, title: 'Steve Jobs', author: 'Walter Isaacson', year: 2011, available: true },
-    { categoryId: categories[6].id, title: 'Dunia Sophie', author: 'Jostein Gaarder', year: 1991, available: true },
-    { categoryId: categories[7].id, title: 'Thinking, Fast and Slow', author: 'Daniel Kahneman', year: 2011, available: true },
-    { categoryId: categories[8].id, title: 'Calculus Made Easy', author: 'Silvanus P. Thompson', year: 1910, available: true },
-    { categoryId: categories[9].id, title: 'The Design of Everyday Things', author: 'Don Norman', year: 1988, available: false },
-    { categoryId: categories[10].id, title: 'Rich Dad Poor Dad', author: 'Robert Kiyosaki', year: 1997, available: true },
-    { categoryId: categories[11].id, title: 'The Subtle Art of Not Giving a F*ck', author: 'Mark Manson', year: 2016, available: true },
-    { categoryId: categories[13].id, title: 'Dilan 1990', author: 'Pidi Baiq', year: 2014, available: true },
-    { categoryId: categories[14].id, title: 'The Girl on the Train', author: 'Paula Hawkins', year: 2015, available: true },
-    { categoryId: categories[15].id, title: 'Harry Potter and the Philosopher\'s Stone', author: 'J.K. Rowling', year: 1997, available: false },
-    { categoryId: categories[15].id, title: 'The Hobbit', author: 'J.R.R. Tolkien', year: 1937, available: true },
-    { categoryId: categories[16].id, title: 'IT', author: 'Stephen King', year: 1986, available: true },
-    { categoryId: categories[18].id, title: 'Matematika Diskrit', author: 'Rinaldi Munir', year: 2010, available: true },
-    { categoryId: categories[19].id, title: 'Eat Pray Love', author: 'Elizabeth Gilbert', year: 2006, available: true },
+    { categoryId: categories[0].id, title: 'Laskar Pelangi', author: 'Andrea Hirata', year: 2005, isbn: '978-979-1227-00-2', totalCopies: 5, available: true },
+    { categoryId: categories[0].id, title: 'Bumi Manusia', author: 'Pramoedya Ananta Toer', year: 1980, isbn: '978-979-3062-00-1', totalCopies: 3, available: true },
+    { categoryId: categories[0].id, title: 'Perahu Kertas', author: 'Dee Lestari', year: 2009, isbn: '978-979-9100-30-5', totalCopies: 2, available: false },
+    { categoryId: categories[1].id, title: 'Sapiens', author: 'Yuval Noah Harari', year: 2011, isbn: '978-0-06-231609-7', totalCopies: 4, available: true },
+    { categoryId: categories[1].id, title: 'Atomic Habits', author: 'James Clear', year: 2018, isbn: '978-0-7352-1129-2', totalCopies: 6, available: true },
+    { categoryId: categories[2].id, title: 'A Brief History of Time', author: 'Stephen Hawking', year: 1988, isbn: '978-0-553-38016-3', totalCopies: 3, available: true },
+    { categoryId: categories[2].id, title: 'Cosmos', author: 'Carl Sagan', year: 1980, isbn: '978-0-345-53943-4', totalCopies: 2, available: false },
+    { categoryId: categories[3].id, title: 'Clean Code', author: 'Robert C. Martin', year: 2008, isbn: '978-0-13-235088-4', totalCopies: 4, available: true },
+    { categoryId: categories[3].id, title: 'The Pragmatic Programmer', author: 'David Thomas', year: 1999, isbn: '978-0-13-595705-9', totalCopies: 3, available: true },
+    { categoryId: categories[4].id, title: 'Guns, Germs, and Steel', author: 'Jared Diamond', year: 1997, isbn: '978-0-393-31755-8', totalCopies: 2, available: true },
+    { categoryId: categories[4].id, title: 'Sejarah Indonesia Modern', author: 'M.C. Ricklefs', year: 1981, isbn: '978-979-461-381-0', totalCopies: 1, available: false },
+    { categoryId: categories[5].id, title: 'Steve Jobs', author: 'Walter Isaacson', year: 2011, isbn: '978-1-4516-4853-9', totalCopies: 3, available: true },
+    { categoryId: categories[6].id, title: 'Dunia Sophie', author: 'Jostein Gaarder', year: 1991, isbn: '978-979-9100-71-8', totalCopies: 2, available: true },
+    { categoryId: categories[7].id, title: 'Thinking, Fast and Slow', author: 'Daniel Kahneman', year: 2011, isbn: '978-0-374-53355-7', totalCopies: 4, available: true },
+    { categoryId: categories[8].id, title: 'Calculus Made Easy', author: 'Silvanus P. Thompson', year: 1910, isbn: '978-0-312-18548-0', totalCopies: 2, available: true },
+    { categoryId: categories[9].id, title: 'The Design of Everyday Things', author: 'Don Norman', year: 1988, isbn: '978-0-465-05065-9', totalCopies: 2, available: false },
+    { categoryId: categories[10].id, title: 'Rich Dad Poor Dad', author: 'Robert Kiyosaki', year: 1997, isbn: '978-1-61268-001-6', totalCopies: 5, available: true },
+    { categoryId: categories[11].id, title: 'The Subtle Art of Not Giving a F*ck', author: 'Mark Manson', year: 2016, isbn: '978-0-06-245771-4', totalCopies: 4, available: true },
+    { categoryId: categories[13].id, title: 'Dilan 1990', author: 'Pidi Baiq', year: 2014, isbn: '978-602-291-007-1', totalCopies: 3, available: true },
+    { categoryId: categories[14].id, title: 'The Girl on the Train', author: 'Paula Hawkins', year: 2015, isbn: '978-1-59463-366-2', totalCopies: 3, available: true },
+    { categoryId: categories[15].id, title: 'Harry Potter and the Philosopher\'s Stone', author: 'J.K. Rowling', year: 1997, isbn: '978-0-7475-3269-9', totalCopies: 5, available: false },
+    { categoryId: categories[15].id, title: 'The Hobbit', author: 'J.R.R. Tolkien', year: 1937, isbn: '978-0-547-92822-7', totalCopies: 3, available: true },
+    { categoryId: categories[16].id, title: 'IT', author: 'Stephen King', year: 1986, isbn: '978-1-5011-4217-4', totalCopies: 2, available: true },
+    { categoryId: categories[18].id, title: 'Matematika Diskrit', author: 'Rinaldi Munir', year: 2010, isbn: '978-602-8759-20-7', totalCopies: 3, available: true },
+    { categoryId: categories[19].id, title: 'Eat Pray Love', author: 'Elizabeth Gilbert', year: 2006, isbn: '978-0-14-311547-1', totalCopies: 2, available: true },
   ]
 
   const books = await Promise.all(
@@ -166,12 +167,43 @@ async function main() {
   )
   console.log(`✅ ${borrowings.length} borrowings seeded!`)
 
+  // ===================== REVIEWS (20 data) =====================
+  console.log('⭐ Seeding reviews...')
+  const reviewsData = [
+    { userId: users[2].id, bookId: books[0].id, rating: 5, comment: 'Buku yang sangat menginspirasi! Cerita anak-anak Belitong yang luar biasa.' },
+    { userId: users[3].id, bookId: books[1].id, rating: 5, comment: 'Karya sastra terbaik Indonesia. Wajib baca untuk semua orang.' },
+    { userId: users[4].id, bookId: books[3].id, rating: 4, comment: 'Sangat menarik, membuka wawasan tentang sejarah peradaban manusia.' },
+    { userId: users[5].id, bookId: books[4].id, rating: 5, comment: 'Buku ini mengubah cara saya membangun kebiasaan sehari-hari. Highly recommended!' },
+    { userId: users[6].id, bookId: books[7].id, rating: 4, comment: 'Panduan yang sangat berguna untuk menulis kode yang bersih dan maintainable.' },
+    { userId: users[7].id, bookId: books[8].id, rating: 4, comment: 'Buku klasik untuk programmer. Tips-tipsnya masih sangat relevan.' },
+    { userId: users[8].id, bookId: books[9].id, rating: 3, comment: 'Cukup informatif tapi agak berat untuk dibaca dalam satu waktu.' },
+    { userId: users[9].id, bookId: books[11].id, rating: 5, comment: 'Biografi Steve Jobs yang sangat detail dan menarik. Tidak bisa berhenti membaca!' },
+    { userId: users[10].id, bookId: books[12].id, rating: 4, comment: 'Pengantar filsafat yang menyenangkan. Cocok untuk pemula.' },
+    { userId: users[11].id, bookId: books[13].id, rating: 5, comment: 'Membuka mata tentang cara kerja pikiran manusia. Sangat recommended.' },
+    { userId: users[12].id, bookId: books[16].id, rating: 3, comment: 'Konsep bagus tapi beberapa saran terasa sudah ketinggalan zaman.' },
+    { userId: users[13].id, bookId: books[17].id, rating: 4, comment: 'Buku yang lucu sekaligus dalam. Perspektif berbeda tentang kehidupan.' },
+    { userId: users[14].id, bookId: books[18].id, rating: 4, comment: 'Nostalgia masa SMA! Cerita cinta yang manis dan menghibur.' },
+    { userId: users[15].id, bookId: books[19].id, rating: 5, comment: 'Thriller yang mencekam! Plot twist-nya benar-benar tidak terduga.' },
+    { userId: users[16].id, bookId: books[21].id, rating: 5, comment: 'Tolkien memang master of fantasy. Dunia Middle-earth sangat hidup.' },
+    { userId: users[17].id, bookId: books[22].id, rating: 4, comment: 'Horror klasik Stephen King yang menakutkan. Tidak untuk yang lemah jantung.' },
+    { userId: users[18].id, bookId: books[23].id, rating: 3, comment: 'Buku kuliah yang cukup lengkap, tapi perlu contoh soal lebih banyak.' },
+    { userId: users[19].id, bookId: books[24].id, rating: 4, comment: 'Perjalanan spiritual yang menginspirasi. Membuat ingin traveling!' },
+    { userId: users[2].id, bookId: books[5].id, rating: 5, comment: 'Stephen Hawking menjelaskan fisika rumit dengan cara yang mudah dipahami.' },
+    { userId: users[3].id, bookId: books[14].id, rating: 3, comment: 'Buku matematika yang cukup mudah dipahami untuk level dasar.' },
+  ]
+
+  const reviews = await Promise.all(
+    reviewsData.map((data) => prisma.reviews.create({ data }))
+  )
+  console.log(`✅ ${reviews.length} reviews seeded!`)
+
   console.log('\n🎉 Seeding complete!')
   console.log(`   📂 Categories: ${categories.length}`)
   console.log(`   👤 Users: ${users.length}`)
   console.log(`   📋 Profiles: ${profiles.length}`)
   console.log(`   📚 Books: ${books.length}`)
   console.log(`   📖 Borrowings: ${borrowings.length}`)
+  console.log(`   ⭐ Reviews: ${reviews.length}`)
 }
 
 main()

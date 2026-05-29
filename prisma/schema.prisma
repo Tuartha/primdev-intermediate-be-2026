@@ -26,6 +26,9 @@ model Users {
   profiles Profiles?
   borrowings Borrowings[] 
   reviews    Reviews[]
+
+  // Index untuk registration trend query (GROUP BY createdAt)
+  @@index([createdAt])
 }
 
 model Books {
@@ -43,6 +46,9 @@ model Books {
   categories Categories? @relation(fields: [categoryId], references: [id])
   borrowings Borrowings[] 
   reviews    Reviews[]
+
+  // Index untuk join category ranking
+  @@index([categoryId])
 }
 
 model Profiles {
@@ -72,6 +78,15 @@ model Borrowings {
   createdAt   DateTime  @default(now())
   borrower    Users     @relation(fields: [userId], references: [id])
   book        Books     @relation(fields: [bookId], references: [id])
+
+  // Index untuk filter borrowing aktif (belum dikembalikan)
+  @@index([returned_at])
+  // Index untuk filter berdasarkan tanggal pinjam (date range queries)
+  @@index([borrow_date])
+  // Composite index: sering query berdasarkan bookId untuk ranking buku terpopuler
+  @@index([bookId, returned_at])
+  // Composite index: query per-user borrowing
+  @@index([userId, borrow_date])
 }
 
 model Reviews {
